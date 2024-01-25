@@ -138,30 +138,61 @@
 //   // listen to port 4000
 //   console.log("Server running on port 4000");
 // });
-const logger = require("./logger");
-const authorize = require("./authorize");
+// const logger = require("./logger");
+// const authorize = require("./authorize");
+// const express = require("express");
+// const morgan = require("morgan");
+
+// const app = express(); // creates an express application
+
+// app.use(morgan("tiny"));
+// // app.use(logger,authorize); // middleware
+// // req => middleware => res
+// //Home route y about route
+
+// app.get("/", (req, res) => {
+//   res.status(200).send("Home Page");
+// });
+
+// app.get("/about", (req, res) => {
+//   res.status(200).send("About Page");
+// });
+
+// app.get("/api/products", authorize,(req, res) => {
+//   res.status(200).send("Products Page");
+// });
+// app.get("/api/items", logger, authorize ,(req, res) => {
+//   console.log(req.user);
+//   res.status(200).send("ITEMS Page");
+// });
+
+// app.listen(4000, () => {
+//   console.log("Server is listening on port 4000...");
+// });
+
 const express = require("express");
+const app = express();
+const { people } = require("./data");
 
-const app = express(); // creates an express application
+//statick assets
+app.use(express.static("./methods-public"));
+//parse form data
+app.use(express.urlencoded({ extended: false }));
 
-// app.use(logger,authorize); // middleware
-// req => middleware => res
-//Home route y about route
-
-app.get("/", (req, res) => {
-  res.status(200).send("Home Page");
+//Get method
+app.get('/api/people', (req, res) => {
+  res.status(200).json({ success: true, data: people });
 });
 
-app.get("/about", (req, res) => {
-  res.status(200).send("About Page");
-});
+app.post('/api/people', (req,res)=>{
+  console.log('post method');
+  console.log(req.body);
+  res.status(201).send('success')
+})
 
-app.get("/api/products", authorize,(req, res) => {
-  res.status(200).send("Products Page");
-});
-app.get("/api/items", logger, authorize ,(req, res) => {
-  console.log(req.user);
-  res.status(200).send("ITEMS Page");
+//Post method
+app.post('/login', (req, res) => {
+ res.status(201).send(`success`);
 });
 
 app.listen(4000, () => {
